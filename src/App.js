@@ -1,9 +1,12 @@
 import React from 'react';
+import Table from './components/Table';
 import './App.css';
-// batata
+
 function App() {
   return (
-    <span>Hello, App!</span>
+    <div>
+      <Table />
+    </div>
   );
 }
 
