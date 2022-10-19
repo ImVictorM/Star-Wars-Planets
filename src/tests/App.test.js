@@ -1,9 +1,21 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
 import App from '../App';
+import renderWithProvider from '../helpers/renderWithProvider';
+import fetchMockResults from '../helpers/fetchMockResults';
 
-test('I am your test', () => {
-  render(<App />);
-  const linkElement = screen.getByText(/Hello, App!/i);
-  expect(linkElement).toBeInTheDocument();
-});
+global.fetch = jest.fn(() =>
+  Promise.resolve({
+    json: () => Promise.resolve(fetchMockResults),
+  })
+);
+
+describe('', () => {
+  // beforeEach(() => {
+  //   fetch.mockClear();
+  // });
+
+  test('I am your test', () => {
+    renderWithProvider(<App />);
+  });
+})
+
