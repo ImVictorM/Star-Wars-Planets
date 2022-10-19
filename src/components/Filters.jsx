@@ -2,43 +2,55 @@ import React, { useContext, useState, useEffect } from 'react';
 import { PlanetsContext } from '../context/PlanetsContext';
 
 function Filters() {
-  const { filterPlanetsByName, filterPlanetsByColumn } = useContext(PlanetsContext);
+  const {
+    filterPlanetsByName,
+    filterPlanetsByColumn,
+  } = useContext(PlanetsContext);
+
   const [filterState, setFilterState] = useState({
     name: '',
     column: 'population',
     operator: 'maior que',
     value: 0,
   });
+  const { name, column, operator, value } = filterState;
+  const [filtersMade, setFiltersMade] = useState([]);
 
   const handleChange = ({ target }) => {
-    const { name, value } = target;
+    const { name: targetName, value: targetValue } = target;
     setFilterState((prevState) => ({
       ...prevState,
-      [name]: value,
+      [targetName]: targetValue,
     }));
   };
 
+  const handleFilter = () => {
+    filterPlanetsByColumn(column, operator, value);
+    const filterType = `${column} ${operator} ${value}`;
+    setFiltersMade((prevState) => [...prevState, filterType]);
+  };
+
   useEffect(() => {
-    const { name } = filterState;
     filterPlanetsByName(name);
-  }, [filterPlanetsByName, filterState]);
+  }, [filterPlanetsByName, name]);
 
-  const { name, column, operator, value } = filterState;
   return (
-    <form>
-      <label htmlFor="name-filter">
-        <span>Nome do planeta</span>
-        <input
-          value={ name }
-          type="text"
-          name="name"
-          id="name-filter"
-          data-testid="name-filter"
-          onChange={ handleChange }
-        />
-      </label>
+    <section>
+      <form>
+        <section>
+          <label htmlFor="name-filter">
+            <span>Nome do planeta</span>
+            <input
+              value={ name }
+              type="text"
+              name="name"
+              id="name-filter"
+              data-testid="name-filter"
+              onChange={ handleChange }
+            />
+          </label>
+        </section>
 
-      <section>
         <label htmlFor="column-filter">
           <span>Coluna</span>
           <select
@@ -87,12 +99,22 @@ function Filters() {
         <button
           type="button"
           data-testid="button-filter"
-          onClick={ () => filterPlanetsByColumn(column, operator, value) }
+          onClick={ handleFilter }
         >
           Filtrar
         </button>
+      </form>
+      <section>
+        {
+          filtersMade.map((filter) => (
+            <div key={ filter }>
+              <span>{filter}</span>
+              <button type="button">Deletar</button>
+            </div>
+          ))
+        }
       </section>
-    </form>
+    </section>
   );
 }
 

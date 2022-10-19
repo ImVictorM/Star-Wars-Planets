@@ -52,7 +52,10 @@ function Table() {
                 <td>{surfaceWater}</td>
                 <td>{population}</td>
                 <td>
-                  {films.map((film, index) => <a href={ film } key={ index }>{film}</a>)}
+                  {
+                    films
+                      .map((film, index) => <a href={ film } key={ index }>{film}</a>)
+                  }
                 </td>
                 <td>{created}</td>
                 <td>{edited}</td>
@@ -63,6 +66,7 @@ function Table() {
         }
       </tbody>
     </table>
+
   );
 }
 

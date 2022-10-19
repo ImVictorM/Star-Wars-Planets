@@ -22,7 +22,7 @@ function Provider({ children }) {
   }, [planets]);
 
   const filterPlanetsByColumn = useCallback((column, operator, value) => {
-    const filteredPlanetsByColumn = planets.filter((planet) => {
+    const filteredPlanetsByColumn = filteredPlanets.filter((planet) => {
       const columnValueToCompare = Number(planet[column]);
       const valueToCompare = Number(value);
       switch (operator) {
@@ -35,7 +35,7 @@ function Provider({ children }) {
       }
     });
     setFilteredPlanets(filteredPlanetsByColumn);
-  }, [planets]);
+  }, [filteredPlanets]);
 
   const contextValue = useMemo(() => ({
     filteredPlanets,
