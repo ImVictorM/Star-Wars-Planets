@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { PlanetsContext } from '../context/PlanetsContext';
 
 function Table() {
-  const { planets } = useContext(PlanetsContext);
+  const { filteredPlanets } = useContext(PlanetsContext);
   return (
     <table>
       <thead>
@@ -24,7 +24,7 @@ function Table() {
       </thead>
       <tbody>
         {
-          planets.map((planet) => {
+          filteredPlanets.map((planet) => {
             const {
               name,
               rotation_period: rotationPeriod,
@@ -51,7 +51,9 @@ function Table() {
                 <td>{terrain}</td>
                 <td>{surfaceWater}</td>
                 <td>{population}</td>
-                <td>{films.map((film) => <a href={ film } key={ name }>{film}</a>)}</td>
+                <td>
+                  {films.map((film, index) => <a href={ film } key={ index }>{film}</a>)}
+                </td>
                 <td>{created}</td>
                 <td>{edited}</td>
                 <td>{url}</td>

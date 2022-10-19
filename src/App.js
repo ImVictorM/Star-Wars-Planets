@@ -1,12 +1,14 @@
 import React from 'react';
 import Table from './components/Table';
+import Filters from './components/Filters';
 import './App.css';
 
 function App() {
   return (
-    <div>
+    <main>
+      <Filters />
       <Table />
-    </div>
+    </main>
   );
 }
 
