@@ -17,12 +17,12 @@ function Provider({ children }) {
   }, []);
 
   const filterPlanetsByName = useCallback((name) => {
-    const planetsToDisplay = planets.filter((planet) => planet.name.includes(name));
-    setFilteredPlanets(planetsToDisplay);
+    const filteredPlanetsByName = planets.filter((planet) => planet.name.includes(name));
+    setFilteredPlanets(filteredPlanetsByName);
   }, [planets]);
 
   const filterPlanetsByColumn = useCallback((column, operator, value) => {
-    const filteredListByColumn = planets.filter((planet) => {
+    const filteredPlanetsByColumn = planets.filter((planet) => {
       const columnValueToCompare = Number(planet[column]);
       const valueToCompare = Number(value);
       switch (operator) {
@@ -34,7 +34,7 @@ function Provider({ children }) {
         return columnValueToCompare === valueToCompare;
       }
     });
-    setFilteredPlanets(filteredListByColumn);
+    setFilteredPlanets(filteredPlanetsByColumn);
   }, [planets]);
 
   const contextValue = useMemo(() => ({
