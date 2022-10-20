@@ -22,7 +22,6 @@ function Provider({ children }) {
   }, [planets]);
 
   const filterPlanetsByColumn = useCallback((filtersDone, remove = false) => {
-    console.log(filtersDone);
     if (filtersDone.length > 0) {
       const planetsToFilter = remove ? planets : filteredPlanets;
       filtersDone.forEach((filter) => {
@@ -46,11 +45,28 @@ function Provider({ children }) {
     }
   }, [planets, filteredPlanets]);
 
+  const sortPlanets = useCallback((order) => {
+    const { column, sort } = order;
+    const filteredPlanetsCopy = [...filteredPlanets];
+    filteredPlanetsCopy.sort((a, b) => {
+      switch (sort) {
+      case 'ASC':
+        return a[column] - b[column];
+      case 'DESC':
+        return b[column] - a[column];
+      default:
+        return undefined;
+      }
+    });
+    setFilteredPlanets(filteredPlanetsCopy);
+  }, [filteredPlanets]);
+
   const contextValue = useMemo(() => ({
     filteredPlanets,
     filterPlanetsByName,
     filterPlanetsByColumn,
-  }), [filteredPlanets, filterPlanetsByName, filterPlanetsByColumn]);
+    sortPlanets,
+  }), [filteredPlanets, filterPlanetsByName, filterPlanetsByColumn, sortPlanets]);
 
   return (
     <PlanetsContext.Provider value={ contextValue }>

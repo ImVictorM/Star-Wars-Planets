@@ -1,5 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { PlanetsContext } from '../context/PlanetsContext';
+import Sort from './Sort';
 
 function Filters() {
   const INITIAL_OPTIONS = [
@@ -143,6 +144,7 @@ function Filters() {
           Filtrar
         </button>
       </form>
+      <Sort INITIAL_OPTIONS={ INITIAL_OPTIONS } />
       <section>
         {
           filtersDone.map((filter, index) => {
