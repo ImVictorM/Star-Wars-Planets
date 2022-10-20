@@ -2,17 +2,18 @@ import React, { useContext, useState, useEffect } from 'react';
 import { PlanetsContext } from '../context/PlanetsContext';
 
 function Filters() {
-  const {
-    filterPlanetsByName,
-    filterPlanetsByColumn,
-  } = useContext(PlanetsContext);
-  const [columnOptions, setColumnOption] = useState([
+  const INITIAL_OPTIONS = [
     'population',
     'orbital_period',
     'diameter',
     'rotation_period',
     'surface_water',
-  ]);
+  ];
+  const {
+    filterPlanetsByName,
+    filterPlanetsByColumn,
+  } = useContext(PlanetsContext);
+  const [columnOptions, setColumnOption] = useState(INITIAL_OPTIONS);
   const [filterState, setFilterState] = useState({
     name: '',
     column: columnOptions[0],
@@ -30,21 +31,43 @@ function Filters() {
     }));
   };
 
+  const handleDeleteFilter = ({ target: { id } }) => {
+    const attFiltersDone = filtersDone
+      .filter((_filter, index) => Number(index) !== Number(id));
+    filterPlanetsByColumn(attFiltersDone, true);
+    setFiltersDone(attFiltersDone);
+    setColumnOption((prevState) => {
+      const { column: filterType } = filtersDone[id];
+      const attColumnOptions = [filterType, ...prevState];
+      return attColumnOptions;
+    });
+  };
+
+  const removeAllFilters = () => {
+    setFiltersDone([]);
+    setColumnOption(INITIAL_OPTIONS);
+    filterPlanetsByColumn([]);
+  };
+
   const handleFilter = () => {
-    filterPlanetsByColumn(column, operator, value);
     const filterType = {
       column,
       operator,
       value,
     };
-    setFiltersDone((prevState) => [...prevState, filterType]);
+    const newFilters = [...filtersDone, filterType];
+    setFiltersDone(newFilters);
     const attOptions = columnOptions.filter((option) => option !== column);
     setColumnOption(attOptions);
+    filterPlanetsByColumn(newFilters);
+  };
+
+  useEffect(() => {
     setFilterState((prevState) => ({
       ...prevState,
-      column: attOptions[0],
+      column: columnOptions[0],
     }));
-  };
+  }, [columnOptions]);
 
   useEffect(() => {
     filterPlanetsByName(name);
@@ -77,8 +100,8 @@ function Filters() {
             onChange={ handleChange }
           >
             {
-              columnOptions.map((option) => (
-                <option key={ option } value={ option }>{option}</option>
+              columnOptions.map((option, index) => (
+                <option key={ index } value={ option }>{option}</option>
               ))
             }
           </select>
@@ -122,20 +145,35 @@ function Filters() {
       </form>
       <section>
         {
-          filtersDone.map((filter) => {
+          filtersDone.map((filter, index) => {
             const {
               column: filterColumn,
               operator: filterOperator,
               value: filterValue,
             } = filter;
             return (
-              <div key={ filterColumn }>
-                <span>{`${filterColumn} ${filterOperator} ${filterValue}`}</span>
-                <button type="button">Deletar</button>
+              <div key={ index } data-testid="filter">
+                <button
+                  onClick={ handleDeleteFilter }
+                  type="button"
+                  id={ index }
+                >
+                  Deletar
+                </button>
+                <span>
+                  {`${filterColumn} ${filterOperator} ${filterValue}`}
+                </span>
               </div>
             );
           })
         }
+        <button
+          data-testid="button-remove-filters"
+          type="button"
+          onClick={ removeAllFilters }
+        >
+          Remover todas filtragens
+        </button>
       </section>
     </section>
   );

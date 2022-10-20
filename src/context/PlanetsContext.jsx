@@ -21,21 +21,30 @@ function Provider({ children }) {
     setFilteredPlanets(filteredPlanetsByName);
   }, [planets]);
 
-  const filterPlanetsByColumn = useCallback((column, operator, value) => {
-    const filteredPlanetsByColumn = filteredPlanets.filter((planet) => {
-      const columnValueToCompare = Number(planet[column]);
-      const valueToCompare = Number(value);
-      switch (operator) {
-      case 'maior que':
-        return columnValueToCompare > valueToCompare;
-      case 'menor que':
-        return columnValueToCompare < valueToCompare;
-      default:
-        return columnValueToCompare === valueToCompare;
-      }
-    });
-    setFilteredPlanets(filteredPlanetsByColumn);
-  }, [filteredPlanets]);
+  const filterPlanetsByColumn = useCallback((filtersDone, remove = false) => {
+    console.log(filtersDone);
+    if (filtersDone.length > 0) {
+      const planetsToFilter = remove ? planets : filteredPlanets;
+      filtersDone.forEach((filter) => {
+        const { column, operator, value } = filter;
+        const filteredPlanetsByColumn = planetsToFilter.filter((planet) => {
+          const columnValueToCompare = Number(planet[column]);
+          const valueToCompare = Number(value);
+          switch (operator) {
+          case 'maior que':
+            return columnValueToCompare > valueToCompare;
+          case 'menor que':
+            return columnValueToCompare < valueToCompare;
+          default:
+            return columnValueToCompare === valueToCompare;
+          }
+        });
+        setFilteredPlanets(filteredPlanetsByColumn);
+      });
+    } else {
+      setFilteredPlanets(planets);
+    }
+  }, [planets, filteredPlanets]);
 
   const contextValue = useMemo(() => ({
     filteredPlanets,
