@@ -6,15 +6,21 @@ function Filters() {
     filterPlanetsByName,
     filterPlanetsByColumn,
   } = useContext(PlanetsContext);
-
+  const [columnOptions, setColumnOption] = useState([
+    'population',
+    'orbital_period',
+    'diameter',
+    'rotation_period',
+    'surface_water',
+  ]);
   const [filterState, setFilterState] = useState({
     name: '',
-    column: 'population',
+    column: columnOptions[0],
     operator: 'maior que',
     value: 0,
   });
   const { name, column, operator, value } = filterState;
-  const [filtersMade, setFiltersMade] = useState([]);
+  const [filtersDone, setFiltersDone] = useState([]);
 
   const handleChange = ({ target }) => {
     const { name: targetName, value: targetValue } = target;
@@ -26,8 +32,18 @@ function Filters() {
 
   const handleFilter = () => {
     filterPlanetsByColumn(column, operator, value);
-    const filterType = `${column} ${operator} ${value}`;
-    setFiltersMade((prevState) => [...prevState, filterType]);
+    const filterType = {
+      column,
+      operator,
+      value,
+    };
+    setFiltersDone((prevState) => [...prevState, filterType]);
+    const attOptions = columnOptions.filter((option) => option !== column);
+    setColumnOption(attOptions);
+    setFilterState((prevState) => ({
+      ...prevState,
+      column: attOptions[0],
+    }));
   };
 
   useEffect(() => {
@@ -57,14 +73,14 @@ function Filters() {
             id="column-filter"
             name="column"
             data-testid="column-filter"
-            value={ column }
+            defaultValue={ column }
             onChange={ handleChange }
           >
-            <option value="population">population</option>
-            <option value="orbital_period">orbital_period</option>
-            <option value="diameter">diameter</option>
-            <option value="rotation_period">rotation_period</option>
-            <option value="surface_water">surface_water</option>
+            {
+              columnOptions.map((option) => (
+                <option key={ option } value={ option }>{option}</option>
+              ))
+            }
           </select>
         </label>
 
@@ -106,12 +122,19 @@ function Filters() {
       </form>
       <section>
         {
-          filtersMade.map((filter) => (
-            <div key={ filter }>
-              <span>{filter}</span>
-              <button type="button">Deletar</button>
-            </div>
-          ))
+          filtersDone.map((filter) => {
+            const {
+              column: filterColumn,
+              operator: filterOperator,
+              value: filterValue,
+            } = filter;
+            return (
+              <div key={ filterColumn }>
+                <span>{`${filterColumn} ${filterOperator} ${filterValue}`}</span>
+                <button type="button">Deletar</button>
+              </div>
+            );
+          })
         }
       </section>
     </section>
