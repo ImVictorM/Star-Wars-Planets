@@ -48,7 +48,20 @@ function Provider({ children }) {
   const sortPlanets = useCallback((order) => {
     const { column, sort } = order;
     const filteredPlanetsCopy = [...filteredPlanets];
+    const POSITIVE_NUMBER = 1;
+    const NEGATIVE_NUMBER = -1;
+    const NEUTRAL_NUMBER = 0;
+    const UNKNOWN_CASE = 'unknown';
     filteredPlanetsCopy.sort((a, b) => {
+      if (a[column] === UNKNOWN_CASE && b[column] === UNKNOWN_CASE) {
+        return NEUTRAL_NUMBER;
+      }
+      if (a[column] === UNKNOWN_CASE) {
+        return POSITIVE_NUMBER;
+      }
+      if (b[column] === UNKNOWN_CASE) {
+        return NEGATIVE_NUMBER;
+      }
       switch (sort) {
       case 'ASC':
         return a[column] - b[column];
