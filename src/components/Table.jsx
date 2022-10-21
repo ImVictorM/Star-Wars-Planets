@@ -4,7 +4,7 @@ import { PlanetsContext } from '../context/PlanetsContext';
 function Table() {
   const { filteredPlanets } = useContext(PlanetsContext);
   return (
-    <table>
+    <table data-testid="planets-table">
       <thead>
         <tr>
           <th>Name</th>

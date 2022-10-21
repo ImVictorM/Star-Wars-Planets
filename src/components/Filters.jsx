@@ -159,6 +159,7 @@ function Filters() {
                   onClick={ handleDeleteFilter }
                   type="button"
                   id={ index }
+                  data-testid="delete-filter"
                 >
                   Deletar
                 </button>
