@@ -65,10 +65,8 @@ function Provider({ children }) {
       switch (sort) {
       case 'ASC':
         return a[column] - b[column];
-      case 'DESC':
-        return b[column] - a[column];
       default:
-        return undefined;
+        return b[column] - a[column];
       }
     });
     setFilteredPlanets(filteredPlanetsCopy);
