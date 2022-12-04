@@ -4,6 +4,8 @@
 
 This project maps Star Wars universe planets, where you can filter, sort, and see detailed information about each planet.
 
+Used API: https://swapi.dev/api/planets
+
 ### Acquired Knowledge 📖
 
 In this project, I was able to:
