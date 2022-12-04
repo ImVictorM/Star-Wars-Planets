@@ -97,7 +97,7 @@ In this project, I was able to:
 
 1. Clone and enter this repository
 ```
-git clone git@github.com:ImVictorM/Trybewallet.git && cd Trybewallet
+git clone git@github.com:ImVictorM/Star-Wars-Planets.git && cd Star-Wars-Planets
 ```
 2. Install the dependencies
 ```
